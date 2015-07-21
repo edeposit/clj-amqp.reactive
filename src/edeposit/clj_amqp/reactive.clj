@@ -10,5 +10,6 @@
   (def my-time (Observable/interval interval time-unit))
   (->> my-time 
        (rx/map fn)
+       (rx/filter (complement nil?))
       )
   )

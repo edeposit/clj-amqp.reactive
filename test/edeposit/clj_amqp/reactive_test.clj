@@ -21,17 +21,15 @@
     (is (= sum 10)))
   )
 
-(deftest just-non-nil-values
-  (testing "just non nil values queue emits"
-    (def obs (rea/make-queue-obs (fn [val] 1) 10 TimeUnit/MILLISECONDS))
+(defn odd-numbers [val]
+  (if (odd? val)
+    val
+    nil
     )
   )
-
-
-
-
-
-
-
-
-
+(deftest just-non-nil-values
+  (testing "just non nil values queue emits"
+    (def obs (rea/make-queue-obs odd-numbers 10 TimeUnit/MILLISECONDS))
+    (is (= (rxb/o->seq (->> obs (rx/take 5 ))) (list 1 3 5 7 9))) 
+    )
+  )
