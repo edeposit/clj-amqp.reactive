@@ -33,3 +33,10 @@
     (is (= (rxb/o->seq (->> obs (rx/take 5 ))) (list 1 3 5 7 9))) 
     )
   )
+
+(deftest implicit-arguments
+  (testing "implicit arguments with timeunit"
+    (def obs (rea/make-queue-obs odd-numbers))
+    (is (= (rxb/o->seq (->> obs (rx/take 5 ))) (list 1 3 5 7 9))) 
+    )
+  )

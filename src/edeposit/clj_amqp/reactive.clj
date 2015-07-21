@@ -7,19 +7,18 @@
             )
   )
 
-(defn make-queue-obs [fn interval time-unit]
-  (def my-time (Observable/interval interval time-unit))
+(defn make-queue-obs [fn & [interval time-unit]]
+  (def my-time (Observable/interval (or interval 100) 
+                                    (or time-unit TimeUnit/MILLISECONDS)))
   (->> my-time 
        (rx/map fn)
        (rx/filter (complement nil?))
       )
   )
 
-(defn queue->obs 
-  ([channel queue-name interval time-unit]
-   (make-queue-obs (fn [val] (lb/get channel queue-name)) interval time-unit)  
-   )
-  ([channel queue-name]
-   (make-queue-obs (fn [val] (lb/get channel queue-name)) 500 TimeUnit/MILLISECONDS)  
-   )
+(defn amqp-queue->obs [channel queue-name & [interval time-unit]]
+  (make-queue-obs (fn [val] (lb/get channel queue-name)) 
+                  (or interval 100) 
+                  (or time-unit TimeUnit/MILLISECONDS))  
+  
   )
